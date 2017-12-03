@@ -1,5 +1,8 @@
 """
 https://code.google.com/codejam/contest/3264486/dashboard#s=p0
+This is a reimplementation of the previous brute force, simple cleanup and
+implemented with a simpler file reader just passes the line straight through
+and is purposefully made to read a single file.
 """
 
 import sys
@@ -12,12 +15,15 @@ def solver(n):
     k = int(next(temp))
 
     flips = 0
+    # Flip the pancakes from left to right via brute force
     for i in range(0, len(cakes) - k + 1):
         if cakes[i] == '-':
             for j in range(0, k):
+                # Inverse pancakes over range
                 cakes[i + j] = '+' if cakes[i+j] == '-' else '-'
             flips += 1
 
+    # Impossible if a plain face pancake exists
     if '-' in cakes:
         print("IMPOSSIBLE")
     else:
