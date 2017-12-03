@@ -1,42 +1,39 @@
+"""
+https://code.google.com/codejam/contest/3264486/dashboard#s=p0
+"""
+
 import sys
 import glob
 
 
-def flip(p):
-    return "+" if p == "-" else "-"
+def solver(n):
+    temp = (i for i in n.split(' '))
+    cakes = list(next(temp))
+    k = int(next(temp))
+
+    flips = 0
+    for i in range(0, len(cakes) - k + 1):
+        if cakes[i] == '-':
+            for j in range(0, k):
+                cakes[i + j] = '+' if cakes[i+j] == '-' else '-'
+            flips += 1
+
+    if '-' in cakes:
+        print("IMPOSSIBLE")
+    else:
+        print(flips)
 
 
-def countFlips(s, K):
-    stack = list(s)
-    stackSize, count = len(s), 0
+if __name__ == "__main__":
+    try:
+        with open(glob.glob('*' + sys.argv[1] + '*')[0]) as f:
+            T = int(f.readline())
+            lines = f.readlines()
+            for z in range(T):
+                print("CASE #{0}: ".format(z + 1), end='')
+                solver(lines[z].rstrip("\n\r"))
 
-    for i in range(stackSize - 1, -1, -1):
-        if stack[i] == "+": continue
-        for j in range(0, int(K)):
-            if i - j < 0: return "IMPOSSIBLE"
-            stack[i-j] = flip(stack[i-j])
-        count += 1
-
-    return str(count)
-
-if len(sys.argv) != 2:
-    print("Please enter an input file.")
-    exit()
-
-inputFiles = []
-if str(sys.argv[1]) == "-l": inputFiles = glob.glob('*-large*.in')
-elif str(sys.argv[1]) == "-s": inputFiles = glob.glob('*-small*.in')
-elif str(sys.argv[1]) == "-t": inputFiles = glob.glob('*.in')
-else:
-    print("Unknown command.")
-    exit()
-
-for fn in inputFiles:
-    with open(fn) as f:
-        T = int(f.readline())
-        lines = [line.strip() for line in f.readlines()]
-        stack = [line.split(" ")[0] for line in lines]
-        K = [line.split(" ")[1] for line in lines]
-
-        for x in range(0, T):
-            print("Case #" + str(x+1) + ": " + countFlips(stack[x], K[x]))
+    except FileNotFoundError:
+        print("File does not exist!")
+    except IndexError:
+        print("Enter input name!")
