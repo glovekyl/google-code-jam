@@ -19,7 +19,7 @@ class Primes:
 
     def __str__(self):
         temp_list = []
-        for i in xrange( len(self.__frontier) ):
+        for i in range(len(self.__frontier)):
             if self.__frontier[i]:
                 temp = ', ' + str(i) if i > 2 else str(i)
                 temp_list.append(temp)
@@ -27,10 +27,10 @@ class Primes:
         return ''.join(temp_list)
 
     def __extend(self, n):
-        self.__frontier.extend( [True] * (n - len(self.__frontier) + 1) )
+        self.__frontier.extend([True] * (n - len(self.__frontier) + 1))
 
     def __calcPrimes(self, n):
-        for i in range(2, int( math.ceil( math.sqrt(n) ) ) + 1):
+        for i in range(2, int(math.ceil(math.sqrt(n))) + 1):
             if self.__frontier[i]:
                 k = 1
                 for j in range(i**2, n + 1, k*i):
