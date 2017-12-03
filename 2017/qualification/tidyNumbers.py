@@ -1,42 +1,39 @@
+"""
+https://code.google.com/codejam/contest/3264486/dashboard#s=p1
+"""
+
 import sys
 import glob
 
 
-def findTidy(n):
-    # while True:
-    #     nu = [int(i) for i in list(str(n))]
-    #     limit = nu[0]
-    #
-    #     for i in range(0, len(nu)):
-    #         if nu[i] < limit: break
-    #         if i is len(nu) - 1: return str(n)
-    #         if nu[i] > limit: limit = nu[i]
-    #
-    #     n -= 1
+def solver(n):
+    m = list(map(int, n))
+    if len(m) == 1:
+        print(n)
+        return
 
-    while True:
-        limit, limit_index = n[0], 0
-        for i in range(0, len(n)):
-            if n[i] < limit:
-                temp = ''.join("9" * len(n[limit_index:-1]))
-                n = ''.join(str(int(n[:limit_index] + str(int(limit) - 1) + temp)))
-                break
+    # Start from the end digit and work back
+    for i in range(len(m)-1, 0, -1):
+        if m[i] < m[i-1]:
+            m[i:] = [9] * len(m[i:])
+            m[i-1] -= 1
 
-            if i + 1 == len(n): return n
+    # Remove start digit if == '0' print list as complete string
+    if m[0] == 0:
+        del m[0]
+    print(''.join(map(str, m)))
 
-            if n[i] > limit:
-                limit = n[i]
-                limit_index = i
 
-inputFiles = []
-if len(sys.argv) == 2 and str(sys.argv[1]) == "-l": inputFiles = glob.glob('*-large*.in')
-elif len(sys.argv) == 2 and str(sys.argv[1]) == "-s": inputFiles = glob.glob('*-small*.in')
-else: inputFiles = glob.glob('sample.in')
+if __name__ == "__main__":
+    try:
+        with open(glob.glob('*' + sys.argv[1] + '*')[0]) as f:
+            T = int(f.readline())
+            lines = f.readlines()
+            for z in range(T):
+                print("CASE #{0}: ".format(z + 1), end='')
+                solver(lines[z].rstrip("\n\r"))
 
-for fn in inputFiles:
-    with open(fn) as f:
-        T = int(f.readline())
-        lines = [line.strip() for line in f.readlines()]
-
-        for x in range(0, T):
-            print( "Case #" + str(x+1) + ": " + findTidy(lines[x]) )
+    except FileNotFoundError:
+        print("File does not exist!")
+    except IndexError:
+        print("Enter input name!")
